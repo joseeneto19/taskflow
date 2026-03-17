@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarefas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="mobile-topbar" id="mobile-topbar">
+    <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M2 4h14M2 9h14M2 14h14" />
+      </svg>
+    </button>
+    <span class="mobile-topbar-title" id="mobile-topbar-title">Quadro</span>
+    <button class="btn-add mobile-btn-add" onclick="openModal()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 1v12M1 7h12" />
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2">
+          <path d="M2 4h10M2 7h7M2 10h5" />
+        </svg>
+      </div>
+      Tarefas
+    </div>
+
+    <div class="nav-section-label">Menu</div>
+
+    <button class="nav-item active" onclick="setView('todas', this); closeSidebar()">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="1" width="6" height="6" rx="1.5" />
+        <rect x="9" y="1" width="6" height="6" rx="1.5" />
+        <rect x="1" y="9" width="6" height="6" rx="1.5" />
+        <rect x="9" y="9" width="6" height="6" rx="1.5" />
+      </svg>
+      Todas
+      <span class="count" id="count-todas">0</span>
+    </button>
+
+    <button class="nav-item" onclick="setView('hoje', this); closeSidebar()">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="2" width="14" height="13" rx="2" />
+        <path d="M5 1v2M11 1v2M1 6h14" />
+      </svg>
+      Hoje
+      <span class="count" id="count-hoje">0</span>
+    </button>
+
+    <button class="nav-item" onclick="setView('pendentes', this); closeSidebar()">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="7" />
+        <path d="M8 4v4l3 2" />
+      </svg>
+      Pendentes
+      <span class="count" id="count-pendentes">0</span>
+    </button>
+
+    <button class="nav-item" onclick="setView('concluidas', this); closeSidebar()">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="7" />
+        <path d="M5 8.5l2 2 4-4" />
+      </svg>
+      Concluídas
+      <span class="count" id="count-concluidas">0</span>
+    </button>
+
+    <div class="sidebar-bottom">
+      <div class="profile-popup" id="profile-popup">
+        <button class="profile-popup-item" onclick="closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="8" cy="5" r="3" />
+            <path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" />
+          </svg>
+          Configurações
+        </button>
+        <button class="profile-popup-item" onclick="toggleTheme()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="8" cy="8" r="3.5" />
+            <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" />
+          </svg>
+          <span id="theme-label">Tema escuro</span>
+          <div class="toggle-track" style="margin-left:auto">
+            <div class="toggle-thumb"></div>
+          </div>
+        </button>
+        <div class="profile-popup-divider"></div>
+        <button class="profile-popup-item danger" onclick="closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2H3a1 1 0 00-1 1v10a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" />
+          </svg>
+          Sair
+        </button>
+      </div>
+
+      <button class="user-box" id="profile-btn" onclick="toggleProfileMenu()">
+        <div class="user-avatar">JN</div>
+        <div style="text-align:left;flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;color:var(--text-primary);">Minha Conta</div>
+          <div style="font-size:11px;color:var(--text-faint);">José Neto</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 5l4-3 4 3M3 9l4 3 4-3" />
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-eyebrow" id="page-eyebrow">Visão geral</div>
+        <div class="page-title" id="page-title">Quadro</div>
+      </div>
+      <button class="btn-add" onclick="openModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M7 1v12M1 7h12" />
+        </svg>
+        Nova Tarefa
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total</div>
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-sub">tarefas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">A Fazer</div>
+        <div class="stat-val" id="stat-todo">0</div>
+        <div class="stat-sub">pendentes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Em Andamento</div>
+        <div class="stat-val" id="stat-doing">0</div>
+        <div class="stat-sub">em progresso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Concluídas</div>
+        <div class="stat-val" id="stat-done">0</div>
+        <div class="stat-completion" id="stat-completion"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board" id="board">
+      <!-- A Fazer -->
+      <div id="col-todo">
+        <div class="col-header">
+          <div class="col-header-left">
+            <div class="col-dot col-dot-todo"></div>
+            <span class="col-title">A Fazer</span>
+          </div>
+          <span class="col-badge badge-todo" id="badge-todo">0</span>
+        </div>
+        <div id="tasks-todo" class="col-todo drop-zone"></div>
+        <div class="add-task-area" id="add-todo">
+          <input type="text" id="input-todo" placeholder="Título da tarefa..." />
+          <div class="add-row">
+            <select id="pri-todo">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+            <select id="tag-todo">
+              <option>Design</option>
+              <option>Dev</option>
+              <option>Reunião</option>
+              <option>Marketing</option>
+            </select>
+          </div>
+          <div class="add-row">
+            <button class="btn-sm" onclick="closeAdd('todo')">Cancelar</button>
+            <button class="btn-sm primary" onclick="addTask('todo')">Adicionar</button>
+          </div>
+        </div>
+        <button class="btn-add-col" onclick="openAdd('todo')">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 1v10M1 6h10" />
+          </svg>
+          Adicionar tarefa
+        </button>
+      </div>
+
+      <!-- Em Andamento -->
+      <div id="col-doing">
+        <div class="col-header">
+          <div class="col-header-left">
+            <div class="col-dot col-dot-doing"></div>
+            <span class="col-title">Em Andamento</span>
+          </div>
+          <span class="col-badge badge-doing" id="badge-doing">0</span>
+        </div>
+        <div id="tasks-doing" class="col-doing drop-zone"></div>
+        <div class="add-task-area" id="add-doing">
+          <input type="text" id="input-doing" placeholder="Título da tarefa..." />
+          <div class="add-row">
+            <select id="pri-doing">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+            <select id="tag-doing">
+              <option>Design</option>
+              <option>Dev</option>
+              <option>Reunião</option>
+              <option>Marketing</option>
+            </select>
+          </div>
+          <div class="add-row">
+            <button class="btn-sm" onclick="closeAdd('doing')">Cancelar</button>
+            <button class="btn-sm primary" onclick="addTask('doing')">Adicionar</button>
+          </div>
+        </div>
+        <button class="btn-add-col" onclick="openAdd('doing')">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 1v10M1 6h10" />
+          </svg>
+          Adicionar tarefa
+        </button>
+      </div>
+
+      <!-- Concluídas -->
+      <div id="col-done">
+        <div class="col-header">
+          <div class="col-header-left">
+            <div class="col-dot col-dot-done"></div>
+            <span class="col-title">Concluídas</span>
+          </div>
+          <span class="col-badge badge-done" id="badge-done">0</span>
+        </div>
+        <div id="tasks-done" class="col-done drop-zone"></div>
+        <div class="add-task-area" id="add-done">
+          <input type="text" id="input-done" placeholder="Título da tarefa..." />
+          <div class="add-row">
+            <select id="pri-done">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+            <select id="tag-done">
+              <option>Design</option>
+              <option>Dev</option>
+              <option>Reunião</option>
+              <option>Marketing</option>
+            </select>
+          </div>
+          <div class="add-row">
+            <button class="btn-sm" onclick="closeAdd('done')">Cancelar</button>
+            <button class="btn-sm primary" onclick="addTask('done')">Adicionar</button>
+          </div>
+        </div>
+        <button class="btn-add-col" onclick="openAdd('done')">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 1v10M1 6h10" />
+          </svg>
+          Adicionar tarefa
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      </div>
+      <div class="empty-title" id="empty-title">Nenhuma tarefa aqui</div>
+      <div class="empty-sub" id="empty-sub">Clique em "Nova Tarefa" para começar</div>
+    </div>
+  </main>
+
+  <!-- Modal nova tarefa -->
+  <div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Nova Tarefa</div>
+        <button class="modal-close" onclick="closeModal()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 3l10 10M13 3L3 13" />
+          </svg>
+        </button>
+      </div>
+      <label>Título</label>
+      <input type="text" id="modal-title-input" placeholder="Nome da tarefa..." />
+      <label>Descrição <span class="label-opt">opcional</span></label>
+      <textarea id="modal-desc" placeholder="Detalhes da tarefa..."></textarea>
+      <div class="modal-row">
+        <div>
+          <label>Status</label>
+          <select id="modal-status">
+            <option value="todo">A Fazer</option>
+            <option value="doing">Em Andamento</option>
+            <option value="done">Concluída</option>
+          </select>
+        </div>
+        <div>
+          <label>Prioridade</label>
+          <select id="modal-priority">
+            <option value="baixa">Baixa</option>
+            <option value="media" selected>Média</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div>
+          <label>Categoria</label>
+          <select id="modal-tag">
+            <option>Design</option>
+            <option>Dev</option>
+            <option>Reunião</option>
+            <option>Marketing</option>
+          </select>
+        </div>
+        <div>
+          <label>Data</label>
+          <input type="date" id="modal-date" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm" onclick="closeModal()">Cancelar</button>
+        <button class="btn-sm primary" onclick="saveModal()">Criar Tarefa</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
